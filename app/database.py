@@ -1,17 +1,19 @@
 from urllib.parse import quote_plus
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
 
-USER = "postgres"
-PASSWORD = quote_plus("admin123")  # 👈 carácter 0xAB
-HOST = "localhost"
-PORT = "5432"
-DB = "IndicadoresITD"
+# cargar variables .env
+load_dotenv()
 
-DATABASE_URL = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}"
+# variables de entorno
+DATABASE_URL = os.getenv("DATABASE_URL")
 
+# motor SQLAlchemy
 engine = create_engine(DATABASE_URL)
 
+# sesiones
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
