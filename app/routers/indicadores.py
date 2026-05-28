@@ -348,12 +348,19 @@ def consultar_docentes(
         .first()
     )
 
+    # 4. TOTAL INSTITUCIONAL
+    total_docentesi = (
+        db.query(func.sum(Docente.cantidad))
+        .filter(Docente.id_periodo == periodo_db.id_periodo)
+        .scalar()
+    )
+
     if not docentes_db or not docentes_db.total:
         raise HTTPException(
             404,
             "No existen datos de docentes para los criterios solicitados"
         )
-
+    
     # 4. Respuesta
     return {
         "departamento": depto_db.nombre,
@@ -363,7 +370,8 @@ def consultar_docentes(
         "tres_cuartos_tiempo": docentes_db.ct or 0,
         "medio_tiempo": docentes_db.mt or 0,
         "horas_asignatura": docentes_db.ha or 0,
-        "total_docentes": docentes_db.total or 0
+        "total_docentes": docentes_db.total or 0,
+        "total_institucional": total_docentesi or 0
     }
 
 @router.get("/administrativos")
